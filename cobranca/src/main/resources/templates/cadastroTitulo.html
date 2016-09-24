@@ -1,69 +1,62 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="LayoutPadrao">
 <head>
-<meta charset="UTF-8" />
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/style.css" />
 <title>Cadastro de Título</title>
 </head>
-<body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#"> <img alt="Logo"
-					src="/images/logo_branco_preto.png"
-					style="height: 30px; width: 120px" />
-				</a>
-			</div>
-		</div>
-	</nav>
-
-	<form class="form-horizontal" method="POST" action="/titulos">
-
-		<div class="alert alert-warning alert-dismissible" role="alert" th:if="${!#strings.isEmpty(msg)}">
-			<button type="button" class="close" data-dismiss="alert"
-				aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<span th:text="${msg}" >salvo</span>
-		</div>
-
-
+<section layout:fragment="conteudo">
+	<form class="form-horizontal" method="POST" th:action="@{/titulos}" th:object="${titulo}">
+		
+		<input type="hidden" th:field="*{id}"/>
+		<div layout:include="mensagem"></div>
+		
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h1 class="panel-title">Novo título</h1>
+				<div class="row">
+					<div class="col-md-6">
+						<h1 class="panel-title">Novo títulos</h1>
+					</div>
+					<div class="col-md-6 text-right">
+						<a class="btn btn-default" th:href="@{/titulos/}">Pesquisa título</a>
+					</div>
+				</div>
 			</div>
 			<div class="panel-body">
-				<div class="form-group">
+				<div class="form-group" th:classappend="${#fields.hasErrors('descricao')} ? has-error">
 
 					<label for="descricao" class="col-sm-2 control-label">Descrição</label>
 					<div class="col-sm-4">
 						<input type="text" class="form-control" id="descricao"
-							name="descricao" />
+							th:field="*{descricao}" />
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" th:classappend="${#fields.hasErrors('dataVencimento')} ? has-error">
 					<label for="dataVencimento" class="col-sm-2 control-label">Data
 						de vencimento</label>
 					<div class="col-sm-2">
 						<input type="text" class="form-control" id="dataVencimento"
-							name="dataVencimento" />
+							th:field="*{dataVencimento}" 
+							data-provide="datepicker" data-date-form="dd/mm/yyyy" data-date-language="pt-BR"
+							data-date-autoclose="true" data-date-today-highlight="true"
+							data-date-orientation="bottom" data-date-daysOfWeekDisabled="true"
+							/>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" th:classappend="${#fields.hasErrors('valor')} ? has-error">
 					<label for="valor" class="col-sm-2 control-label">Valor</label>
 					<div class="col-sm-2">
-						<input type="text" class="form-control" id="valor" name="valor" />
+						<input type="text" class="form-control js-currency" id="valor" th:field="*{valor}" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="status" class="col-sm-2 control-label">Status</label>
 					<div class="col-sm-2">
-						<select class="form-control" name="status">
-							
-							<option th:each="status : ${todosStatusTitulo}" th:value="${status}" 
-							th:text="${status.descricao}"></option>
+						<select class="form-control" th:field="*{status}">
+
+							<option th:each="status : ${todosStatusTitulo}"
+								th:value="${status}" th:text="${status.descricao}"></option>
 						</select>
 					</div>
 				</div>
@@ -81,10 +74,8 @@
 
 		</div>
 
+
 	</form>
 
-	<script type="text/javascript" src="/js/jquery-3.1.0.min.js"></script>
-	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/js/npm.js"></script>
-</body>
+</section>
 </html>
